@@ -3,45 +3,44 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Your College Name | AI Assistant</title>
+  <title>Conversational Chatbot for Academic FAQs</title>
 
   <style>
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: "Segoe UI", sans-serif;
+      font-family: "Inter", "Segoe UI", sans-serif;
     }
 
-
-    body::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image: url("images.png");
-  background-size: cover;
+ body {
+  min-height: 100vh;
+  background-image: url("PIC/logo.svg");
+  background-repeat: no-repeat;
   background-position: center;
-  filter: blur(12px);
-  transform: scale(1.1); /* prevents white edges */
-  z-index: -1;
+  background-size: contain;   /* 👈 KEY CHANGE */
+  background-attachment: fixed;
+  color: #1f2937;
 }
+
 
     header {
       height: 70px;
-      background: rgba(0, 0, 0, 0.4);
       display: flex;
       align-items: center;
-      padding: 0 30px;
-      backdrop-filter: blur(10px);
+      padding: 0 40px;
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
     }
 
     header h1 {
-      font-size: 22px;
-      letter-spacing: 1px;
+      font-size: 20px;
+      font-weight: 600;
     }
 
     header span {
-      color: #ff0202;
+      color: #871414;
     }
 
     main {
@@ -49,86 +48,85 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      text-align: center;
       padding: 20px;
+      text-align: center;
     }
 
     .hero {
-      max-width: 800px;
+      max-width: 700px;
+      padding: 40px;
+      background: rgba(255, 255, 255, 0.55);
+      backdrop-filter: blur(14px);
+      border-radius: 18px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
     }
 
     .hero h2 {
-      font-size: 38px;
+      font-size: 36px;
+      font-weight: 700;
       margin-bottom: 15px;
     }
 
     .hero p {
-      font-size: 18px;
-      opacity: 0.85;
+      font-size: 17px;
+      line-height: 1.6;
+      color: #4b5563;
       margin-bottom: 30px;
     }
 
     .hint {
       font-size: 14px;
-      opacity: 0.6;
-      margin-top: 15px;
+      color: #6b7280;
     }
 
     footer {
       position: fixed;
-      bottom: 10px;
+      bottom: 12px;
       width: 100%;
       text-align: center;
       font-size: 12px;
-      opacity: 0.6;
+      color: #6b7280;
     }
-  
 
-  
-  /* Increase chatbot launcher (icon) size */
-  .bpw-widget-btn {
-    width: 80px !important;
-    height: 80px !important;
-    border-radius: 18px !important;
-  }
+    /* Chatbot launcher size */
+    .bpw-widget-btn {
+      width: 72px !important;
+      height: 72px !important;
+      border-radius: 20px !important;
+    }
 
-  /* Increase icon inside the button */
-  .bpw-widget-btn img,
-  .bpw-widget-btn svg {
-    width: 42px !important;
-    height: 42px !important;
-  }
-</style>
-
-  
+    .bpw-widget-btn img,
+    .bpw-widget-btn svg {
+      width: 36px !important;
+      height: 36px !important;
+    }
+  </style>
 
   <!-- Botpress Webchat -->
-  
-<script src="https://cdn.botpress.cloud/webchat/v3.5/inject.js"></script>
-<script src="https://files.bpcontent.cloud/2026/02/02/14/20260202145020-QSML7MHE.js" defer></script>
-    
+  <script src="https://cdn.botpress.cloud/webchat/v3.5/inject.js"></script>
+  <script src="https://files.bpcontent.cloud/2026/02/02/14/20260202145020-QSML7MHE.js" defer></script>
 </head>
 
 <body>
   <header>
-    <h1><span>Conversational Chatbot</span>  for Academic FAQs</h1>
+    <h1><span>Conversational Chatbot for </span>Academic FAQs</h1>
   </header>
 
   <main>
     <div class="hero">
-      <h2>Talk to Our College AI 🤖</h2>
+      <h2>Ask Your College AI 🤖</h2>
       <p>
-        Ask anything about admissions, courses, exams, campus life, or events.
-        Our AI assistant is here 24/7.
+        Get instant answers about admissions, courses, exams,
+        campus life, and events — anytime, anywhere.
       </p>
       <div class="hint">
-        ⬇ Click the chat bubble at the bottom-right to start talking
+        Click the chat bubble at the bottom-right to start
       </div>
     </div>
   </main>
 
   <footer>
-    © 2026  • Made by Ayush Pandey
+    © 2026 • Made by Ayush Pandey
   </footer>
 </body>
 </html>
