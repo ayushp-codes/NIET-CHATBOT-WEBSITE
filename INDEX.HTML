@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your College Name | AI Assistant</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Segoe UI", sans-serif;
+    }
+
+
+    body::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("PIC/images.png");
+  background-size: cover;
+  background-position: center;
+  filter: blur(12px);
+  transform: scale(1.1); /* prevents white edges */
+  z-index: -1;
+}
+
+    header {
+      height: 70px;
+      background: rgba(0, 0, 0, 0.4);
+      display: flex;
+      align-items: center;
+      padding: 0 30px;
+      backdrop-filter: blur(10px);
+    }
+
+    header h1 {
+      font-size: 22px;
+      letter-spacing: 1px;
+    }
+
+    header span {
+      color: #ff0202;
+    }
+
+    main {
+      height: calc(100vh - 70px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .hero {
+      max-width: 800px;
+    }
+
+    .hero h2 {
+      font-size: 38px;
+      margin-bottom: 15px;
+    }
+
+    .hero p {
+      font-size: 18px;
+      opacity: 0.85;
+      margin-bottom: 30px;
+    }
+
+    .hint {
+      font-size: 14px;
+      opacity: 0.6;
+      margin-top: 15px;
+    }
+
+    footer {
+      position: fixed;
+      bottom: 10px;
+      width: 100%;
+      text-align: center;
+      font-size: 12px;
+      opacity: 0.6;
+    }
+  </style>
+
+  <!-- Botpress Webchat -->
+  <script src="https://cdn.botpress.cloud/webchat/v3.5/inject.js"></script>
+  <script src="https://files.bpcontent.cloud/2026/02/02/14/20260202145020-QSML7MHE.js" defer></script>
+</head>
+
+<body>
+  <header>
+    <h1><span>Conversational Chatbot</span>  for Academic FAQs</h1>
+  </header>
+
+  <main>
+    <div class="hero">
+      <h2>Talk to Our College AI 🤖</h2>
+      <p>
+        Ask anything about admissions, courses, exams, campus life, or events.
+        Our AI assistant is here 24/7.
+      </p>
+      <div class="hint">
+        ⬇ Click the chat bubble at the bottom-right to start talking
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    © 2026 Your College Name • Powered by AI
+  </footer>
+</body>
+</html>
