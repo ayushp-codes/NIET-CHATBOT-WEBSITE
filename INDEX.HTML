@@ -19,7 +19,6 @@
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   html { scroll-behavior: smooth; }
 
   body {
@@ -29,7 +28,6 @@
     overflow-x: hidden;
   }
 
-  /* ─── NOISE OVERLAY ─── */
   body::before {
     content: '';
     position: fixed; inset: 0;
@@ -39,17 +37,12 @@
     z-index: 0;
   }
 
-  /* ─── ANIMATED BG BLOBS ─── */
-  .blob-wrap {
-    position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
-  }
-  .blob {
-    position: absolute; border-radius: 50%;
-    filter: blur(90px); opacity: 0.18; animation: drift 14s ease-in-out infinite alternate;
-  }
-  .blob1 { width: 600px; height: 600px; background: #1a3afb; top: -150px; left: -100px; animation-delay: 0s; }
-  .blob2 { width: 500px; height: 500px; background: #00d4ff; bottom: -100px; right: -100px; animation-delay: -5s; }
-  .blob3 { width: 350px; height: 350px; background: #7b2fff; top: 40%; left: 50%; animation-delay: -9s; }
+  /* ─── BLOBS ─── */
+  .blob-wrap { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+  .blob { position: absolute; border-radius: 50%; filter: blur(90px); opacity: 0.18; animation: drift 14s ease-in-out infinite alternate; }
+  .blob1 { width: min(600px, 80vw); height: min(600px, 80vw); background: #1a3afb; top: -150px; left: -100px; animation-delay: 0s; }
+  .blob2 { width: min(500px, 70vw); height: min(500px, 70vw); background: #00d4ff; bottom: -100px; right: -100px; animation-delay: -5s; }
+  .blob3 { width: min(350px, 60vw); height: min(350px, 60vw); background: #7b2fff; top: 40%; left: 50%; animation-delay: -9s; }
 
   @keyframes drift {
     0%   { transform: translate(0,0) scale(1); }
@@ -59,62 +52,101 @@
   /* ─── NAV ─── */
   nav {
     position: fixed; top: 0; width: 100%; z-index: 100;
-    padding: 18px 6vw;
+    padding: 16px clamp(16px, 6vw, 48px);
     display: flex; align-items: center; justify-content: space-between;
-    background: rgba(10,14,46,0.65);
+    background: rgba(10,14,46,0.75);
     backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--border);
+    gap: 16px;
   }
 
   .logo {
     font-family: 'Syne', sans-serif;
-    font-weight: 800; font-size: 1.5rem;
-    letter-spacing: -0.02em;
+    font-weight: 800; font-size: clamp(1.2rem, 4vw, 1.5rem);
+    letter-spacing: -0.02em; flex-shrink: 0;
   }
   .logo span { color: var(--cyan); }
 
-  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links { display: flex; gap: clamp(16px, 3vw, 32px); list-style: none; }
   .nav-links a {
     font-size: 0.88rem; font-weight: 500; color: var(--gray);
-    text-decoration: none; letter-spacing: 0.04em;
-    transition: color 0.2s;
+    text-decoration: none; letter-spacing: 0.04em; transition: color 0.2s;
+    white-space: nowrap;
   }
   .nav-links a:hover { color: var(--white); }
 
   .nav-cta {
-    background: var(--blue);
-    color: #fff; font-weight: 600; font-size: 0.85rem;
+    background: var(--blue); color: #fff; font-weight: 600; font-size: 0.85rem;
     border: none; padding: 10px 22px; border-radius: 999px;
     cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
-    letter-spacing: 0.03em;
+    letter-spacing: 0.03em; white-space: nowrap; flex-shrink: 0;
   }
   .nav-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(26,58,251,0.5); }
+
+  /* Hamburger */
+  .hamburger {
+    display: none;
+    flex-direction: column; gap: 5px; cursor: pointer;
+    background: none; border: none; padding: 4px;
+    z-index: 200;
+  }
+  .hamburger span {
+    display: block; width: 24px; height: 2px;
+    background: var(--white); border-radius: 2px;
+    transition: transform 0.3s, opacity 0.3s;
+  }
+  .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; }
+  .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* Mobile drawer */
+  .mobile-menu {
+    display: none;
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(10,14,46,0.97);
+    backdrop-filter: blur(20px);
+    z-index: 99;
+    flex-direction: column; align-items: center; justify-content: center;
+    gap: 32px; padding: 80px 24px 40px;
+  }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a {
+    font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 700;
+    color: var(--white); text-decoration: none; letter-spacing: -0.02em;
+    transition: color 0.2s;
+  }
+  .mobile-menu a:hover { color: var(--cyan); }
+  .mobile-menu .mobile-cta {
+    background: var(--blue); color: #fff; font-weight: 600; font-size: 1rem;
+    border: none; padding: 14px 36px; border-radius: 999px; cursor: pointer;
+    margin-top: 8px;
+  }
 
   /* ─── HERO ─── */
   .hero {
     position: relative; z-index: 1;
-    min-height: 100vh;
+    min-height: 100svh;
     display: flex; flex-direction: column;
     align-items: center; justify-content: center;
     text-align: center;
-    padding: 140px 6vw 80px;
+    padding: clamp(100px, 18vh, 160px) clamp(16px, 6vw, 48px) clamp(48px, 8vh, 80px);
   }
 
   .badge {
     display: inline-flex; align-items: center; gap: 8px;
     background: rgba(0,212,255,0.1); border: 1px solid rgba(0,212,255,0.3);
     padding: 6px 18px; border-radius: 999px;
-    font-size: 0.78rem; font-weight: 500; color: var(--cyan);
+    font-size: clamp(0.68rem, 2vw, 0.78rem); font-weight: 500; color: var(--cyan);
     letter-spacing: 0.08em; text-transform: uppercase;
-    margin-bottom: 32px;
+    margin-bottom: 28px;
     animation: fadeUp 0.8s ease both;
   }
-  .badge-dot { width: 8px; height: 8px; background: var(--cyan); border-radius: 50%; animation: pulse 1.5s infinite; }
+  .badge-dot { width: 8px; height: 8px; background: var(--cyan); border-radius: 50%; animation: pulse 1.5s infinite; flex-shrink: 0; }
   @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
 
   .hero h1 {
     font-family: 'Syne', sans-serif;
-    font-size: clamp(3rem, 7vw, 6.5rem);
+    font-size: clamp(2.6rem, 8vw, 6.5rem);
     font-weight: 800; line-height: 1.0; letter-spacing: -0.03em;
     animation: fadeUp 0.8s 0.15s ease both;
   }
@@ -124,31 +156,33 @@
   }
 
   .hero p {
-    font-size: clamp(1rem, 2vw, 1.25rem);
+    font-size: clamp(0.95rem, 2.5vw, 1.25rem);
     color: var(--gray); max-width: 580px; line-height: 1.7;
-    margin: 28px auto 48px;
+    margin: 24px auto 40px;
     font-weight: 300;
     animation: fadeUp 0.8s 0.3s ease both;
+    padding: 0 8px;
   }
 
   .hero-btns {
-    display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;
+    display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;
     animation: fadeUp 0.8s 0.45s ease both;
+    padding: 0 8px;
   }
 
   .btn-primary {
     background: linear-gradient(135deg, var(--blue), #6c3fff);
-    color: #fff; font-weight: 600; font-size: 1rem;
-    border: none; padding: 15px 36px; border-radius: 999px;
+    color: #fff; font-weight: 600; font-size: clamp(0.9rem, 2.5vw, 1rem);
+    border: none; padding: clamp(12px, 3vw, 15px) clamp(24px, 5vw, 36px); border-radius: 999px;
     cursor: pointer; transition: transform 0.25s, box-shadow 0.25s;
     font-family: 'DM Sans', sans-serif;
   }
   .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 14px 40px rgba(108,63,255,0.45); }
 
   .btn-outline {
-    background: transparent;
-    color: var(--white); font-weight: 500; font-size: 1rem;
-    border: 1px solid var(--border); padding: 15px 36px; border-radius: 999px;
+    background: transparent; color: var(--white); font-weight: 500;
+    font-size: clamp(0.9rem, 2.5vw, 1rem);
+    border: 1px solid var(--border); padding: clamp(12px, 3vw, 15px) clamp(24px, 5vw, 36px); border-radius: 999px;
     cursor: pointer; transition: background 0.2s, border-color 0.2s;
     font-family: 'DM Sans', sans-serif;
   }
@@ -159,9 +193,10 @@
     to   { opacity: 1; transform: translateY(0); }
   }
 
-  /* ─── FLOATING CHAT PREVIEW ─── */
+  /* ─── CHAT PREVIEW ─── */
   .hero-preview {
-    position: relative; margin-top: 80px; width: 100%; max-width: 760px;
+    position: relative; margin-top: 64px; width: 100%;
+    max-width: min(760px, 94vw);
     animation: fadeUp 0.9s 0.6s ease both;
   }
   .preview-glow {
@@ -172,8 +207,7 @@
   .preview-card {
     background: rgba(255,255,255,0.04);
     border: 1px solid var(--border);
-    border-radius: 20px;
-    overflow: hidden;
+    border-radius: 20px; overflow: hidden;
     backdrop-filter: blur(20px);
     box-shadow: 0 40px 80px rgba(0,0,0,0.5);
   }
@@ -184,24 +218,15 @@
     display: flex; align-items: center; gap: 12px;
   }
   .preview-dots { display: flex; gap: 6px; }
-  .preview-dots span {
-    width: 10px; height: 10px; border-radius: 50%;
-    background: rgba(255,255,255,0.15);
-  }
+  .preview-dots span { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.15); }
   .preview-dots span:nth-child(1) { background: #ff5f57; }
   .preview-dots span:nth-child(2) { background: #ffbd2e; }
   .preview-dots span:nth-child(3) { background: #28ca41; }
-  .preview-title {
-    font-size: 0.82rem; color: var(--gray); font-weight: 500;
-    margin-left: 4px;
-  }
-  .preview-status {
-    margin-left: auto; display: flex; align-items: center; gap: 6px;
-    font-size: 0.75rem; color: #00d4ff;
-  }
-  .status-dot { width: 7px; height: 7px; background: #00d4ff; border-radius: 50%; animation: pulse 1.5s infinite; }
+  .preview-title { font-size: 0.82rem; color: var(--gray); font-weight: 500; margin-left: 4px; }
+  .preview-status { margin-left: auto; display: flex; align-items: center; gap: 6px; font-size: 0.75rem; color: #00d4ff; }
+  .status-dot { width: 7px; height: 7px; background: #00d4ff; border-radius: 50%; animation: pulse 1.5s infinite; flex-shrink: 0; }
 
-  .preview-body { padding: 24px 20px; display: flex; flex-direction: column; gap: 16px; }
+  .preview-body { padding: clamp(16px, 4vw, 24px) clamp(12px, 4vw, 20px); display: flex; flex-direction: column; gap: 14px; }
 
   .msg { display: flex; gap: 10px; }
   .msg.bot { align-items: flex-start; }
@@ -216,23 +241,14 @@
   .avatar.user-av { background: rgba(245,200,66,0.2); color: var(--gold); border: 1px solid rgba(245,200,66,0.4); }
 
   .bubble {
-    padding: 12px 16px; border-radius: 14px;
-    font-size: 0.88rem; line-height: 1.6; max-width: 78%;
+    padding: 11px 15px; border-radius: 14px;
+    font-size: clamp(0.8rem, 2.2vw, 0.88rem); line-height: 1.6; max-width: 80%;
   }
-  .bubble.ai {
-    background: rgba(26,58,251,0.18); border: 1px solid rgba(26,58,251,0.3);
-    border-top-left-radius: 4px;
-  }
-  .bubble.user-b {
-    background: rgba(245,200,66,0.12); border: 1px solid rgba(245,200,66,0.2);
-    border-top-right-radius: 4px; text-align: right;
-  }
+  .bubble.ai { background: rgba(26,58,251,0.18); border: 1px solid rgba(26,58,251,0.3); border-top-left-radius: 4px; }
+  .bubble.user-b { background: rgba(245,200,66,0.12); border: 1px solid rgba(245,200,66,0.2); border-top-right-radius: 4px; text-align: right; }
 
   .typing { display: flex; gap: 5px; align-items: center; padding: 12px 16px; }
-  .typing span {
-    width: 7px; height: 7px; border-radius: 50%; background: var(--cyan);
-    animation: bounce 1.2s infinite ease-in-out;
-  }
+  .typing span { width: 7px; height: 7px; border-radius: 50%; background: var(--cyan); animation: bounce 1.2s infinite ease-in-out; }
   .typing span:nth-child(2) { animation-delay: 0.2s; }
   .typing span:nth-child(3) { animation-delay: 0.4s; }
   @keyframes bounce { 0%,80%,100% { transform: scale(0.8); opacity: 0.5; } 40% { transform: scale(1.2); opacity: 1; } }
@@ -244,60 +260,48 @@
     background: var(--border);
     border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
   }
-  .stat {
-    background: var(--navy2); padding: 40px 32px;
-    text-align: center; transition: background 0.2s;
-  }
+  .stat { background: var(--navy2); padding: clamp(24px, 5vw, 40px) clamp(16px, 4vw, 32px); text-align: center; transition: background 0.2s; }
   .stat:hover { background: rgba(255,255,255,0.03); }
   .stat-num {
     font-family: 'Syne', sans-serif;
-    font-size: 2.8rem; font-weight: 800;
+    font-size: clamp(1.8rem, 5vw, 2.8rem); font-weight: 800;
     background: linear-gradient(135deg, var(--white), var(--cyan));
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   }
-  .stat-label { font-size: 0.82rem; color: var(--gray); margin-top: 4px; letter-spacing: 0.06em; }
+  .stat-label { font-size: clamp(0.7rem, 1.8vw, 0.82rem); color: var(--gray); margin-top: 4px; letter-spacing: 0.06em; }
 
-  /* ─── FEATURES ─── */
+  /* ─── SECTIONS ─── */
   .section {
     position: relative; z-index: 1;
-    padding: 120px 6vw;
+    padding: clamp(64px, 10vw, 120px) clamp(16px, 6vw, 48px);
   }
 
-  .section-label {
-    font-size: 0.75rem; font-weight: 600; letter-spacing: 0.12em;
-    text-transform: uppercase; color: var(--cyan); margin-bottom: 12px;
-  }
-
+  .section-label { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--cyan); margin-bottom: 12px; }
   .section-title {
     font-family: 'Syne', sans-serif;
-    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-size: clamp(1.7rem, 4.5vw, 3.2rem);
     font-weight: 800; letter-spacing: -0.025em; line-height: 1.1;
     max-width: 600px;
   }
+  .section-sub { font-size: clamp(0.9rem, 2.2vw, 1.05rem); color: var(--gray); max-width: 520px; margin-top: 16px; line-height: 1.7; font-weight: 300; }
 
-  .section-sub {
-    font-size: 1.05rem; color: var(--gray); max-width: 520px;
-    margin-top: 16px; line-height: 1.7; font-weight: 300;
-  }
-
+  /* ─── FEATURES GRID ─── */
   .features-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    margin-top: 64px;
+    gap: clamp(12px, 2vw, 20px);
+    margin-top: 56px;
   }
 
   .feature-card {
     background: var(--card-bg);
     border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 36px 28px;
+    border-radius: 16px; padding: clamp(24px, 4vw, 36px) clamp(20px, 3vw, 28px);
     transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
     position: relative; overflow: hidden;
   }
   .feature-card::before {
-    content: '';
-    position: absolute; inset: 0;
+    content: ''; position: absolute; inset: 0;
     background: linear-gradient(135deg, rgba(26,58,251,0.07), transparent);
     opacity: 0; transition: opacity 0.3s;
   }
@@ -307,27 +311,17 @@
   .feature-icon {
     width: 52px; height: 52px; border-radius: 14px;
     display: flex; align-items: center; justify-content: center;
-    font-size: 1.5rem; margin-bottom: 22px;
+    font-size: 1.5rem; margin-bottom: 20px;
     background: rgba(0,212,255,0.1); border: 1px solid rgba(0,212,255,0.2);
   }
-
-  .feature-name {
-    font-family: 'Syne', sans-serif;
-    font-size: 1.1rem; font-weight: 700; margin-bottom: 10px;
-  }
-  .feature-desc { font-size: 0.88rem; color: var(--gray); line-height: 1.65; font-weight: 300; }
+  .feature-name { font-family: 'Syne', sans-serif; font-size: clamp(0.95rem, 2vw, 1.1rem); font-weight: 700; margin-bottom: 10px; }
+  .feature-desc { font-size: clamp(0.82rem, 1.8vw, 0.88rem); color: var(--gray); line-height: 1.65; font-weight: 300; }
 
   /* ─── HOW IT WORKS ─── */
-  .how-wrap {
-    display: grid; grid-template-columns: 1fr 1fr;
-    gap: 80px; align-items: center;
-  }
+  .how-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(40px, 8vw, 80px); align-items: center; }
 
   .steps { display: flex; flex-direction: column; gap: 0; margin-top: 48px; }
-  .step {
-    display: flex; gap: 20px; position: relative;
-    padding-bottom: 36px; cursor: pointer;
-  }
+  .step { display: flex; gap: 20px; position: relative; padding-bottom: 36px; cursor: pointer; }
   .step:last-child { padding-bottom: 0; }
   .step-line {
     position: absolute; left: 19px; top: 44px;
@@ -335,57 +329,44 @@
     background: linear-gradient(to bottom, rgba(0,212,255,0.4), transparent);
   }
   .step:last-child .step-line { display: none; }
-
   .step-num {
     width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
     display: flex; align-items: center; justify-content: center;
     font-family: 'Syne', sans-serif; font-weight: 800; font-size: 0.85rem;
     border: 2px solid rgba(0,212,255,0.4); color: var(--cyan);
-    transition: background 0.2s, border-color 0.2s;
-    position: relative; z-index: 1;
+    transition: background 0.2s, border-color 0.2s; position: relative; z-index: 1;
   }
   .step:hover .step-num { background: var(--cyan); color: var(--navy); border-color: var(--cyan); }
-
-  .step-content h4 {
-    font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700;
-    margin-bottom: 6px; padding-top: 8px;
-  }
-  .step-content p { font-size: 0.86rem; color: var(--gray); line-height: 1.6; font-weight: 300; }
+  .step-content h4 { font-family: 'Syne', sans-serif; font-size: clamp(0.95rem, 2vw, 1rem); font-weight: 700; margin-bottom: 6px; padding-top: 8px; }
+  .step-content p { font-size: clamp(0.82rem, 1.8vw, 0.86rem); color: var(--gray); line-height: 1.6; font-weight: 300; }
 
   /* phone mockup */
-  .phone-wrap {
-    display: flex; justify-content: center; align-items: center;
-    position: relative;
-  }
+  .phone-wrap { display: flex; justify-content: center; align-items: center; position: relative; }
   .phone-glow {
     position: absolute; width: 300px; height: 300px;
     background: radial-gradient(circle, rgba(26,58,251,0.4), transparent 70%);
     top: 50%; left: 50%; transform: translate(-50%, -50%);
   }
   .phone {
-    width: 280px;
+    width: clamp(240px, 70%, 280px);
     background: rgba(255,255,255,0.04);
-    border: 1px solid var(--border);
-    border-radius: 40px; overflow: hidden;
+    border: 1px solid var(--border); border-radius: 40px; overflow: hidden;
     box-shadow: 0 50px 100px rgba(0,0,0,0.6);
     position: relative; z-index: 1;
     animation: float 4s ease-in-out infinite;
   }
   @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
-
   .phone-top {
     background: rgba(255,255,255,0.03); border-bottom: 1px solid var(--border);
     padding: 16px 20px; display: flex; align-items: center; gap: 10px;
   }
-  .phone-avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #1a3afb, #00d4ff); }
+  .phone-avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #1a3afb, #00d4ff); flex-shrink: 0; }
   .phone-name { font-size: 0.82rem; font-weight: 600; }
   .phone-sub { font-size: 0.7rem; color: var(--cyan); }
-
   .phone-chat { padding: 16px; display: flex; flex-direction: column; gap: 12px; }
   .ph-msg { border-radius: 12px; padding: 10px 14px; font-size: 0.78rem; line-height: 1.55; max-width: 85%; }
   .ph-msg.ai { background: rgba(26,58,251,0.2); border: 1px solid rgba(26,58,251,0.25); align-self: flex-start; }
   .ph-msg.usr { background: rgba(245,200,66,0.15); border: 1px solid rgba(245,200,66,0.2); align-self: flex-end; text-align: right; }
-
   .phone-input {
     margin: 0 16px 16px;
     display: flex; gap: 8px; align-items: center;
@@ -393,93 +374,109 @@
     border-radius: 999px; padding: 8px 14px;
   }
   .phone-input span { font-size: 0.75rem; color: var(--gray); flex: 1; }
-  .send-btn {
-    width: 28px; height: 28px; background: var(--blue); border-radius: 50%;
-    display: flex; align-items: center; justify-content: center; font-size: 0.7rem;
-  }
+  .send-btn { width: 28px; height: 28px; background: var(--blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; flex-shrink: 0; }
 
   /* ─── TOPICS ─── */
   .topics-grid {
-    display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
-    margin-top: 64px;
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: clamp(10px, 2vw, 16px); margin-top: 56px;
   }
   .topic-card {
     background: var(--card-bg); border: 1px solid var(--border);
-    border-radius: 14px; padding: 24px 20px;
-    transition: transform 0.25s, border-color 0.25s;
-    text-align: center;
+    border-radius: 14px; padding: clamp(16px, 3vw, 24px) clamp(12px, 2.5vw, 20px);
+    transition: transform 0.25s, border-color 0.25s; text-align: center;
   }
   .topic-card:hover { transform: translateY(-4px); border-color: rgba(0,212,255,0.4); }
-  .topic-icon { font-size: 2rem; margin-bottom: 12px; }
-  .topic-name { font-family: 'Syne', sans-serif; font-size: 0.9rem; font-weight: 700; margin-bottom: 6px; }
-  .topic-count { font-size: 0.78rem; color: var(--cyan); }
+  .topic-icon { font-size: clamp(1.5rem, 4vw, 2rem); margin-bottom: 10px; }
+  .topic-name { font-family: 'Syne', sans-serif; font-size: clamp(0.8rem, 1.8vw, 0.9rem); font-weight: 700; margin-bottom: 6px; }
+  .topic-count { font-size: clamp(0.7rem, 1.5vw, 0.78rem); color: var(--cyan); }
 
-  /* ─── CTA SECTION ─── */
-  .cta-section {
-    position: relative; z-index: 1;
-    padding: 100px 6vw;
-    text-align: center;
-  }
+  /* ─── CTA ─── */
+  .cta-section { position: relative; z-index: 1; padding: clamp(48px, 8vw, 100px) clamp(16px, 6vw, 48px); text-align: center; }
   .cta-card {
     background: linear-gradient(135deg, rgba(26,58,251,0.2), rgba(0,212,255,0.08));
     border: 1px solid rgba(0,212,255,0.2);
-    border-radius: 28px; padding: 80px 40px;
+    border-radius: 28px; padding: clamp(48px, 8vw, 80px) clamp(24px, 6vw, 40px);
     position: relative; overflow: hidden;
   }
   .cta-card::before {
     content: 'NIET'; font-family: 'Syne', sans-serif;
-    font-size: 20rem; font-weight: 800;
+    font-size: clamp(8rem, 25vw, 20rem); font-weight: 800;
     position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
     color: rgba(255,255,255,0.015); white-space: nowrap; pointer-events: none;
     letter-spacing: -0.05em;
   }
-  .cta-card h2 {
-    font-family: 'Syne', sans-serif;
-    font-size: clamp(2rem, 4vw, 3rem); font-weight: 800;
-    letter-spacing: -0.02em; margin-bottom: 16px;
-  }
-  .cta-card p { font-size: 1.05rem; color: var(--gray); max-width: 480px; margin: 0 auto 40px; font-weight: 300; line-height: 1.7; }
+  .cta-card h2 { font-family: 'Syne', sans-serif; font-size: clamp(1.6rem, 4.5vw, 3rem); font-weight: 800; letter-spacing: -0.02em; margin-bottom: 16px; }
+  .cta-card p { font-size: clamp(0.9rem, 2.2vw, 1.05rem); color: var(--gray); max-width: 480px; margin: 0 auto 40px; font-weight: 300; line-height: 1.7; }
 
   /* ─── FOOTER ─── */
   footer {
     position: relative; z-index: 1;
     border-top: 1px solid var(--border);
-    padding: 40px 6vw;
+    padding: clamp(28px, 5vw, 40px) clamp(16px, 6vw, 48px);
     display: flex; align-items: center; justify-content: space-between;
-    flex-wrap: wrap; gap: 20px;
+    flex-wrap: wrap; gap: 16px;
   }
   .footer-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.1rem; }
   .footer-logo span { color: var(--cyan); }
-  .footer-links { display: flex; gap: 28px; }
+  .footer-links { display: flex; gap: clamp(12px, 3vw, 28px); flex-wrap: wrap; }
   .footer-links a { font-size: 0.82rem; color: var(--gray); text-decoration: none; transition: color 0.2s; }
   .footer-links a:hover { color: var(--white); }
   .footer-copy { font-size: 0.78rem; color: #4a5270; }
 
-  /* Botpress widget is injected automatically */
-
-  /* ─── SCROLL ANIMATIONS ─── */
+  /* ─── SCROLL REVEAL ─── */
   .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
   .reveal.visible { opacity: 1; transform: none; }
 
-  /* ─── RESPONSIVE ─── */
-  @media (max-width: 900px) {
-    .features-grid { grid-template-columns: 1fr 1fr; }
-    .topics-grid { grid-template-columns: 1fr 1fr; }
-    .how-wrap { grid-template-columns: 1fr; }
-    .phone-wrap { display: none; }
-    .stats { grid-template-columns: 1fr 1fr; }
+  /* ─── RESPONSIVE BREAKPOINTS ─── */
+
+  /* Large tablets */
+  @media (max-width: 1024px) {
+    .features-grid { grid-template-columns: repeat(2, 1fr); }
+    .topics-grid { grid-template-columns: repeat(3, 1fr); }
   }
-  @media (max-width: 600px) {
+
+  /* Tablets */
+  @media (max-width: 900px) {
+    .nav-links { display: none; }
+    .nav-cta { display: none; }
+    .hamburger { display: flex; }
+
+    .how-wrap { grid-template-columns: 1fr; gap: 48px; }
+    .phone-wrap { display: none; }
+
+    .stats { grid-template-columns: repeat(2, 1fr); }
+
+    .topics-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* Small tablets / large phones */
+  @media (max-width: 640px) {
     .features-grid { grid-template-columns: 1fr; }
-    .topics-grid { grid-template-columns: 1fr 1fr; }
-    .stats { grid-template-columns: 1fr 1fr; }
-    .nav-links, .nav-cta { display: none; }
+    .topics-grid { grid-template-columns: repeat(2, 1fr); }
+    .stats { grid-template-columns: repeat(2, 1fr); }
+
+    .hero-btns { flex-direction: column; align-items: center; }
+    .hero-btns .btn-primary,
+    .hero-btns .btn-outline { width: 100%; max-width: 300px; text-align: center; }
+
+    .cta-card { border-radius: 20px; }
+    .cta-card p { padding: 0 8px; }
+
+    footer { flex-direction: column; align-items: flex-start; gap: 12px; }
+    .footer-links { gap: 16px; }
+  }
+
+  /* Small phones */
+  @media (max-width: 400px) {
+    .badge { font-size: 0.62rem; padding: 5px 12px; }
+    .topics-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .topic-card { padding: 16px 10px; }
   }
 </style>
 </head>
 <body>
 
-<!-- BG BLOBS -->
 <div class="blob-wrap">
   <div class="blob blob1"></div>
   <div class="blob blob2"></div>
@@ -495,23 +492,31 @@
     <li><a href="#topics">Topics</a></li>
     <li><a href="#about">About</a></li>
   </ul>
-  <button class="nav-cta" onclick="document.querySelector('.bp-btn').click()">Chat Now →</button>
+  <button class="nav-cta" onclick="document.querySelector('.bp-btn') && document.querySelector('.bp-btn').click()">Chat Now →</button>
+  <button class="hamburger" id="hamburger" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#features" class="mobile-link">Features</a>
+  <a href="#how" class="mobile-link">How it Works</a>
+  <a href="#topics" class="mobile-link">Topics</a>
+  <a href="#about" class="mobile-link">About</a>
+  <button class="mobile-cta">Start Chatting →</button>
+</div>
 
 <!-- HERO -->
 <section class="hero">
   <div class="badge"><span class="badge-dot"></span> Powered by AI · Built for NIET Students</div>
-  <h1>
-    Your Campus<br>
-    <span class="highlight">AI Companion</span>
-  </h1>
+  <h1>Your Campus<br><span class="highlight">AI Companion</span></h1>
   <p>Get instant answers to every academic, administrative, and campus-life question — anytime, anywhere.</p>
   <div class="hero-btns">
     <button class="btn-primary">Ask Your First Question →</button>
     <button class="btn-outline">Explore Features</button>
   </div>
 
-  <!-- CHAT PREVIEW -->
   <div class="hero-preview">
     <div class="preview-glow"></div>
     <div class="preview-card">
@@ -547,22 +552,10 @@
 
 <!-- STATS -->
 <div class="stats">
-  <div class="stat reveal">
-    <div class="stat-num" data-target="10000">0</div>
-    <div class="stat-label">Students Served</div>
-  </div>
-  <div class="stat reveal">
-    <div class="stat-num" data-target="500">0</div>
-    <div class="stat-label">Questions Answered Daily</div>
-  </div>
-  <div class="stat reveal">
-    <div class="stat-num" data-target="98">0</div>
-    <div class="stat-label">% Satisfaction Rate</div>
-  </div>
-  <div class="stat reveal">
-    <div class="stat-num" data-target="24">0</div>
-    <div class="stat-label">× 7 Availability</div>
-  </div>
+  <div class="stat reveal"><div class="stat-num" data-target="10000">0</div><div class="stat-label">Students Served</div></div>
+  <div class="stat reveal"><div class="stat-num" data-target="500">0</div><div class="stat-label">Questions Answered Daily</div></div>
+  <div class="stat reveal"><div class="stat-num" data-target="98">0</div><div class="stat-label">% Satisfaction Rate</div></div>
+  <div class="stat reveal"><div class="stat-num" data-target="24">0</div><div class="stat-label">× 7 Availability</div></div>
 </div>
 
 <!-- FEATURES -->
@@ -570,38 +563,13 @@
   <div class="section-label">What We Offer</div>
   <h2 class="section-title reveal">Everything you need, one conversation away.</h2>
   <p class="section-sub reveal">NIET AI handles the questions so you can focus on what matters — learning.</p>
-
   <div class="features-grid">
-    <div class="feature-card reveal">
-      <div class="feature-icon">📚</div>
-      <div class="feature-name">Academic Doubts</div>
-      <div class="feature-desc">Get subject-specific help across all departments — CSE, ECE, MBA, MCA, and more. Clear concepts in seconds.</div>
-    </div>
-    <div class="feature-card reveal">
-      <div class="feature-icon">🗓️</div>
-      <div class="feature-name">Exam & Schedule Info</div>
-      <div class="feature-desc">Instantly access date sheets, timetables, hall tickets, result announcements, and academic calendars.</div>
-    </div>
-    <div class="feature-card reveal">
-      <div class="feature-icon">💰</div>
-      <div class="feature-name">Fee & Admission</div>
-      <div class="feature-desc">Fee structure, scholarship details, payment deadlines, and admission procedures explained clearly.</div>
-    </div>
-    <div class="feature-card reveal">
-      <div class="feature-icon">🎓</div>
-      <div class="feature-name">Placement Guidance</div>
-      <div class="feature-desc">Stay updated on upcoming drives, company details, eligibility criteria, and preparation resources.</div>
-    </div>
-    <div class="feature-card reveal">
-      <div class="feature-icon">🏛️</div>
-      <div class="feature-name">Campus & Facilities</div>
-      <div class="feature-desc">Library timings, hostel info, transport routes, labs, canteen, and every campus facility at your fingertips.</div>
-    </div>
-    <div class="feature-card reveal">
-      <div class="feature-icon">🔔</div>
-      <div class="feature-name">Events & Notices</div>
-      <div class="feature-desc">Never miss a fest, workshop, seminar, or important circular. Get real-time updates the moment they drop.</div>
-    </div>
+    <div class="feature-card reveal"><div class="feature-icon">📚</div><div class="feature-name">Academic Doubts</div><div class="feature-desc">Get subject-specific help across all departments — CSE, ECE, MBA, MCA, and more. Clear concepts in seconds.</div></div>
+    <div class="feature-card reveal"><div class="feature-icon">🗓️</div><div class="feature-name">Exam & Schedule Info</div><div class="feature-desc">Instantly access date sheets, timetables, hall tickets, result announcements, and academic calendars.</div></div>
+    <div class="feature-card reveal"><div class="feature-icon">💰</div><div class="feature-name">Fee & Admission</div><div class="feature-desc">Fee structure, scholarship details, payment deadlines, and admission procedures explained clearly.</div></div>
+    <div class="feature-card reveal"><div class="feature-icon">🎓</div><div class="feature-name">Placement Guidance</div><div class="feature-desc">Stay updated on upcoming drives, company details, eligibility criteria, and preparation resources.</div></div>
+    <div class="feature-card reveal"><div class="feature-icon">🏛️</div><div class="feature-name">Campus & Facilities</div><div class="feature-desc">Library timings, hostel info, transport routes, labs, canteen, and every campus facility at your fingertips.</div></div>
+    <div class="feature-card reveal"><div class="feature-icon">🔔</div><div class="feature-name">Events & Notices</div><div class="feature-desc">Never miss a fest, workshop, seminar, or important circular. Get real-time updates the moment they drop.</div></div>
   </div>
 </section>
 
@@ -613,50 +581,29 @@
       <h2 class="section-title reveal">Ridiculously simple to use.</h2>
       <div class="steps">
         <div class="step reveal">
-          <div class="step-num">1</div>
-          <div class="step-line"></div>
-          <div class="step-content">
-            <h4>Open the Chat</h4>
-            <p>Click the chat button on any page. No login, no waiting. The AI is ready instantly.</p>
-          </div>
+          <div class="step-num">1</div><div class="step-line"></div>
+          <div class="step-content"><h4>Open the Chat</h4><p>Click the chat button on any page. No login, no waiting. The AI is ready instantly.</p></div>
         </div>
         <div class="step reveal">
-          <div class="step-num">2</div>
-          <div class="step-line"></div>
-          <div class="step-content">
-            <h4>Ask Anything</h4>
-            <p>Type your question in plain language — Hindi, English, whatever's comfortable. The AI understands.</p>
-          </div>
+          <div class="step-num">2</div><div class="step-line"></div>
+          <div class="step-content"><h4>Ask Anything</h4><p>Type your question in plain language — Hindi, English, whatever's comfortable. The AI understands.</p></div>
         </div>
         <div class="step reveal">
-          <div class="step-num">3</div>
-          <div class="step-line"></div>
-          <div class="step-content">
-            <h4>Get Instant Answers</h4>
-            <p>Receive accurate, context-aware responses within seconds. Ask follow-ups, dig deeper, clarify more.</p>
-          </div>
+          <div class="step-num">3</div><div class="step-line"></div>
+          <div class="step-content"><h4>Get Instant Answers</h4><p>Receive accurate, context-aware responses within seconds. Ask follow-ups, dig deeper, clarify more.</p></div>
         </div>
         <div class="step reveal">
-          <div class="step-num">4</div>
-          <div class="step-line"></div>
-          <div class="step-content">
-            <h4>Escalate if Needed</h4>
-            <p>For complex issues, the AI connects you to the right faculty or admin office directly.</p>
-          </div>
+          <div class="step-num">4</div><div class="step-line"></div>
+          <div class="step-content"><h4>Escalate if Needed</h4><p>For complex issues, the AI connects you to the right faculty or admin office directly.</p></div>
         </div>
       </div>
     </div>
-
-    <!-- Phone mockup -->
     <div class="phone-wrap">
       <div class="phone-glow"></div>
       <div class="phone">
         <div class="phone-top">
           <div class="phone-avatar"></div>
-          <div>
-            <div class="phone-name">NIET AI</div>
-            <div class="phone-sub">● Online Now</div>
-          </div>
+          <div><div class="phone-name">NIET AI</div><div class="phone-sub">● Online Now</div></div>
         </div>
         <div class="phone-chat">
           <div class="ph-msg ai">Hi! How can I help you today? 😊</div>
@@ -665,10 +612,7 @@
           <div class="ph-msg usr">Yes please!</div>
           <div class="ph-msg ai">Here you go → <span style="color:var(--cyan)">portal.niet.co.in/fee</span> 🔗</div>
         </div>
-        <div class="phone-input">
-          <span>Type a message…</span>
-          <div class="send-btn">→</div>
-        </div>
+        <div class="phone-input"><span>Type a message…</span><div class="send-btn">→</div></div>
       </div>
     </div>
   </div>
@@ -679,48 +623,15 @@
   <div class="section-label">Knowledge Base</div>
   <h2 class="section-title reveal">Trained on everything NIET.</h2>
   <p class="section-sub reveal">Our AI is specifically trained on NIET's data — not generic internet content.</p>
-
   <div class="topics-grid">
-    <div class="topic-card reveal">
-      <div class="topic-icon">💻</div>
-      <div class="topic-name">Computer Science</div>
-      <div class="topic-count">DSA · OS · DBMS · CN · more</div>
-    </div>
-    <div class="topic-card reveal">
-      <div class="topic-icon">⚡</div>
-      <div class="topic-name">Electronics & ECE</div>
-      <div class="topic-count">Circuits · Signals · VLSI</div>
-    </div>
-    <div class="topic-card reveal">
-      <div class="topic-icon">📊</div>
-      <div class="topic-name">MBA & Management</div>
-      <div class="topic-count">Finance · Marketing · HR</div>
-    </div>
-    <div class="topic-card reveal">
-      <div class="topic-icon">🔧</div>
-      <div class="topic-name">Mechanical Engg.</div>
-      <div class="topic-count">Thermodynamics · Manufacturing</div>
-    </div>
-    <div class="topic-card reveal">
-      <div class="topic-icon">📐</div>
-      <div class="topic-name">Civil Engineering</div>
-      <div class="topic-count">Structures · Survey · Geo</div>
-    </div>
-    <div class="topic-card reveal">
-      <div class="topic-icon">🧪</div>
-      <div class="topic-name">Applied Sciences</div>
-      <div class="topic-count">Physics · Maths · Chemistry</div>
-    </div>
-    <div class="topic-card reveal">
-      <div class="topic-icon">🏆</div>
-      <div class="topic-name">Placements</div>
-      <div class="topic-count">Drives · Resume · Interviews</div>
-    </div>
-    <div class="topic-card reveal">
-      <div class="topic-icon">📋</div>
-      <div class="topic-name">Administration</div>
-      <div class="topic-count">Fee · Docs · Deadlines</div>
-    </div>
+    <div class="topic-card reveal"><div class="topic-icon">💻</div><div class="topic-name">Computer Science</div><div class="topic-count">DSA · OS · DBMS · CN · more</div></div>
+    <div class="topic-card reveal"><div class="topic-icon">⚡</div><div class="topic-name">Electronics & ECE</div><div class="topic-count">Circuits · Signals · VLSI</div></div>
+    <div class="topic-card reveal"><div class="topic-icon">📊</div><div class="topic-name">MBA & Management</div><div class="topic-count">Finance · Marketing · HR</div></div>
+    <div class="topic-card reveal"><div class="topic-icon">🔧</div><div class="topic-name">Mechanical Engg.</div><div class="topic-count">Thermodynamics · Manufacturing</div></div>
+    <div class="topic-card reveal"><div class="topic-icon">📐</div><div class="topic-name">Civil Engineering</div><div class="topic-count">Structures · Survey · Geo</div></div>
+    <div class="topic-card reveal"><div class="topic-icon">🧪</div><div class="topic-name">Applied Sciences</div><div class="topic-count">Physics · Maths · Chemistry</div></div>
+    <div class="topic-card reveal"><div class="topic-icon">🏆</div><div class="topic-name">Placements</div><div class="topic-count">Drives · Resume · Interviews</div></div>
+    <div class="topic-card reveal"><div class="topic-icon">📋</div><div class="topic-name">Administration</div><div class="topic-count">Fee · Docs · Deadlines</div></div>
   </div>
 </section>
 
@@ -729,7 +640,7 @@
   <div class="cta-card reveal">
     <h2>Ready to ask your first question?</h2>
     <p>Join thousands of NIET students who get answers in seconds — not hours.</p>
-    <button class="btn-primary" style="font-size:1.05rem; padding: 16px 44px;">
+    <button class="btn-primary" style="font-size: clamp(0.95rem, 2.5vw, 1.05rem); padding: 16px clamp(28px, 6vw, 44px);">
       Start Chatting Now →
     </button>
   </div>
@@ -747,16 +658,33 @@
   <div class="footer-copy">© 2025 NIET – Noida Institute of Engineering & Technology</div>
 </footer>
 
-<!-- BOTPRESS WIDGET -->
+<!-- BOTPRESS -->
 <script src="https://cdn.botpress.cloud/webchat/v3.6/inject.js"></script>
 <script src="https://files.bpcontent.cloud/2026/02/02/14/20260202145020-QSML7MHE.js" defer></script>
 
 <script>
-  // ── COUNTER ANIMATION ──
+  /* ── HAMBURGER ── */
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open');
+    mobileMenu.classList.toggle('open');
+    document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+  });
+
+  document.querySelectorAll('.mobile-link').forEach(link => {
+    link.addEventListener('click', () => {
+      hamburger.classList.remove('open');
+      mobileMenu.classList.remove('open');
+      document.body.style.overflow = '';
+    });
+  });
+
+  /* ── COUNTER ANIMATION ── */
   function animateCount(el) {
     const target = +el.dataset.target;
-    const dur = 1800;
-    const step = 16;
+    const dur = 1800, step = 16;
     const inc = target / (dur / step);
     let cur = 0;
     const timer = setInterval(() => {
@@ -766,30 +694,26 @@
     }, step);
   }
 
-  // ── SCROLL REVEAL ──
+  /* ── SCROLL REVEAL ── */
   const revealEls = document.querySelectorAll('.reveal');
   const statNums  = document.querySelectorAll('.stat-num');
   let counted = false;
 
   const obs = new IntersectionObserver((entries) => {
     entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add('visible');
-        obs.unobserve(e.target);
-      }
+      if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
     });
-  }, { threshold: 0.12 });
+  }, { threshold: 0.1 });
 
   const statsObs = new IntersectionObserver((entries) => {
     if (!counted && entries[0].isIntersecting) {
       counted = true;
       statNums.forEach(animateCount);
     }
-  }, { threshold: 0.3 });
+  }, { threshold: 0.2 });
 
   revealEls.forEach(el => obs.observe(el));
   if (statNums.length) statsObs.observe(statNums[0].closest('.stats'));
 </script>
-
 </body>
 </html>
